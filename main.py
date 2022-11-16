@@ -67,25 +67,74 @@ class LinkedList:
 
         result = LinkedList()
 
-        #TODO: Finish this.
+        cursor_self = self.first.getNext()
+
+        while cursor_self is not None:
+          result.append(cursor_self.getItem())
+          cursor_self = cursor_self.getNext()
+
+        cursor_other = other.first.getNext()
+
+        while cursor_other is not None:
+          result.append(cursor_other.getItem())
+          cursor_other = cursor_other.getNext()
 
         return result
 
     def __contains__(self, item):
-        # This is left as an exercise for the reader.
-        pass
+        if self.numItems == 0:
+          return False
+      
+        cursor = self.first.getNext()
+
+        while cursor is not None:
+          if cursor.getItem() == item:
+            return True
+          
+          cursor = cursor.getNext()
+
+        return False
 
     def __delitem__(self, index):
-        # This is left as an exercise for the reader.
-        pass
+      if 0 < index < self.numItems:
+          cursor = self.first.getNext()
+          for i in range(index-1):
+            cursor = cursor.getNext()
+
+          toDelete = cursor.getNext()
+          cursor.setNext(cursor.getNext().getNext())
+          toDelete.setNext(None)
+          self.numItems -= 1
+      elif index == 0:
+        #case where index is 0
+
+          return self
+
+        raise IndexError("LinkedList index out of range")
+
 
     def __eq__(self, other):
-        # This is left as an exercise for the reader.
-        pass
+      if type(self) != type(other):
+        return False
+
+      if self.numItems != other.numItems:
+        return False
+
+      cursor_self = self.first.getNext()
+      cursor_other = other.first.getNext()
+
+      while cursor_self is not None:
+        if cursor_self.getItem() != cursor_other.getItem():
+          return False
+
+        cursor_self = cursor_self.getNext()
+        cursor_other = cursor_other.getNext()
+
+      return True
+      
 
     def __len__(self):
-        # This is left as an exercise for the reader.
-        pass
+        return self.numItems
 
     def append(self, item):
         node = LinkedList.__Node(item)
@@ -94,9 +143,21 @@ class LinkedList:
         self.numItems += 1
 
     def __str__(self):
-        # This is left as an exercise for the reader.
-        pass
+      cursor = self.first.getNext()
+      outstring = '['
+      
+      while cursor is not None:
+        
+        outstring += str(cursor.getItem())
+        if cursor.getNext() is not None:
+          outstring += ', '
 
+        cursor = cursor.getNext()
+
+      outstring = outstring.rstrip(', ')
+      outstring += ']'
+
+      return outstring
 
 def main():
     lst = LinkedList()
