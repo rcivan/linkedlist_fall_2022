@@ -57,8 +57,32 @@ class LinkedList:
         raise IndexError("LinkedList assignment index out of range")
 
     def insert(self, index, item):
-        # This is left as an exercise for the reader.
-        pass
+        if 0 < index < self.numItems:
+            node = LinkedList.__Node(item)
+            cursor = self.first.getNext()
+            for i in range(index-1):
+                cursor = cursor.getNext()
+                print(i)
+    
+            afterNew = cursor.getNext()
+            cursor.setNext(node)
+            node.setNext(afterNew)
+            self.numItems += 1
+            return
+          
+        elif index == 0:
+            node = LinkedList.__Node(item)
+            afterNew = self.first.getNext()
+            self.first.setNext(node)
+            node.setNext(afterNew)
+            self.numItems += 1
+            return
+        
+        elif index > self.numItems:
+            self.append(item)
+            return
+
+        raise IndexError("LinkedList index out of range")
 
     def __add__(self, other):
         if type(self) != type(other):
@@ -105,12 +129,15 @@ class LinkedList:
           cursor.setNext(cursor.getNext().getNext())
           toDelete.setNext(None)
           self.numItems -= 1
+          return
       elif index == 0:
-        #case where index is 0
+        toDelete = self.first.getNext()
+        self.first.setNext(self.first.getNext().getNext())
+        toDelete.setNext(None)
+        self.numItems -= 1
+        return
 
-          return self
-
-        raise IndexError("LinkedList index out of range")
+      raise IndexError("LinkedList index out of range")
 
 
     def __eq__(self, other):
@@ -141,6 +168,23 @@ class LinkedList:
         self.last.setNext(node)
         self.last = node
         self.numItems += 1
+
+    def swap(self, indexA, indexB):
+        cursorA = self.first.getNext()
+        cursorB = self.first.getNext()
+        for i in range(indexA):
+             cursorA = cursorA.getNext()
+        for x in range(indexB):
+             cursorB = cursorB.getNext()
+
+        A = cursorA.getItem()
+        B = cursorB.getItem()
+
+        cursorA.setItem(B)
+        cursorB.setItem(A)
+
+        return
+        
 
     def __str__(self):
       cursor = self.first.getNext()
@@ -219,7 +263,7 @@ def main():
     lst4 = LinkedList(lst)
     lst.insert(0, 100)
     lst4 = LinkedList([100]) + lst4
-
+  
     if lst == lst4:
         print("Test 9 Passed")
     else:
@@ -233,9 +277,16 @@ def main():
     else:
         print("Test 10 Failed")
 
+    
+    lst.swap(1, 2)
+
+    if lst != lst4:
+        print("Test 11 Passed")
+    else:
+        print("Test 11 Failed")
+
     print(lst)
     print(lst4)
-
 
 if __name__ == "__main__":
     main()
