@@ -119,6 +119,23 @@ class LinkedList:
 
         return False
 
+    def isSorted(self):
+      cursor = self.first.getNext()
+      while cursor.getNext() is not None:
+        if cursor.getItem() > cursor.getNext().getItem():
+          return False
+        cursor = cursor.getNext()
+
+      return True
+
+    def bubbleSort(self):
+      while self.isSorted() == False:
+        for i in range(self.numItems-1):
+          if self[i] > self[i+1]:
+            self.swap(i, i+1)
+      return
+            
+
     def __delitem__(self, index):
       if 0 < index < self.numItems:
           cursor = self.first.getNext()
@@ -284,6 +301,14 @@ def main():
         print("Test 11 Passed")
     else:
         print("Test 11 Failed")
+
+    lst.bubbleSort()
+    lst4.bubbleSort()
+
+    if lst == lst4:
+      print("Test 12 Passed")
+    else:
+      print("Test 12 Failed")
 
     print(lst)
     print(lst4)
